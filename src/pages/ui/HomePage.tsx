@@ -1,7 +1,9 @@
-import {Home} from "../../components/Home";
+import {Main} from "../../components/Main/ui/Main.tsx";
 
 export const HomePage = () => {
     return (
-        <Home />
-    );
-};
+           <>
+            <Main/>
+           </>
+    )
+}
