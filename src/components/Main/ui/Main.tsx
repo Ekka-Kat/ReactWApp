@@ -7,7 +7,7 @@ import { useState } from 'react'
 export const Main = () => {
     const allCards = filterBtns[0];
     const [cards, setCards] = useState(card);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
     const [cart, setCart] = useState<ICartItem[]>([]);
 
 
@@ -27,16 +27,32 @@ export const Main = () => {
 
     const handleAddToCart = (btn, cart: ICartItem[]) => {
         const cardItemIndex = card.findIndex((item) => item.id === parseInt(btn.target.id));
-        console.log('btn.target.id', typeof(btn.target.id));
         console.log('cardItemIndex', cardItemIndex);
         console.log('начальное значение cart при вызове handleAddToCart', cart);
-        if (!cart) {
-            setCart([
+        if (!cart || cart.length === 0) {
+            setCart([...cart,
                 {
                     id: card[cardItemIndex].id, name: card[cardItemIndex].name,
                     price: card[cardItemIndex].price, description: card[cardItemIndex].description, amount: 1
                 }
             ]);
+        }
+        else {
+            const cartItemIndex= cart.findIndex(item => item.id === parseInt(btn.target.id))
+            if ( cartItemIndex!= -1) {
+                cart[cartItemIndex].amount += 1;
+                cart[cartItemIndex].price += card[cardItemIndex].price;
+                setCart(cart);
+            }
+            else
+            {
+                setCart([...cart,
+                    {
+                        id: card[cardItemIndex].id, name: card[cardItemIndex].name,
+                        price: card[cardItemIndex].price, description: card[cardItemIndex].description, amount: 1
+                    }
+                ]);
+            }
         }
        console.log('значение cart после добавления', cart);
     }
@@ -45,10 +61,11 @@ export const Main = () => {
     <div>
     <GetButtons onClick = {handleFilterBtnClick} isActive={activeIndex}/>
     <GetCards mapCards={cards} currentCart={cart} onClickBuy={handleAddToCart}/>
+
     </div>
    )
 }
-//    <Header cart={cart}/>
+// <Header cart={cart}/>
 /*const Header = (cart) => {
 
     const [activeCart, setActiveCart] = useState(false);
