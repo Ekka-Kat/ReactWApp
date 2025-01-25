@@ -61,12 +61,12 @@ export const Main = () => {
     <div>
     <GetButtons onClick = {handleFilterBtnClick} isActive={activeIndex}/>
     <GetCards mapCards={cards} currentCart={cart} onClickBuy={handleAddToCart}/>
-
+    <Header cartToRender={cart}/>
     </div>
    )
 }
-// <Header cart={cart}/>
-/*const Header = (cart) => {
+//
+const Header = (cartToRender: ICartItem[]) => {
 
     const [activeCart, setActiveCart] = useState(false);
 
@@ -79,37 +79,40 @@ export const Main = () => {
         isActive: boolean;
     }
 
-    const GetCart = ({ cart, isActive }: GetCartProps) => {
-        if (!cart || cart.length === 0) {
+    const GetCart = ({ cartToRender, isActive }) => {
+        if (!cartToRender) {
+            return
+        }
+        if (cartToRender.length === 0) {
             return (
                 <div className={style.cartActive}>
                     <p> В вашей корзине 0 товаров </p>
                 </div>
             );
-        }
-
-        return (
-            <div className={`${isActive ? style.cartActive : style.hidden}`}>
-                {cart.map((item) => (
-                    <div className={style.cartItem} key={item.id}>
-                        <p className={style.text}>{item.name}</p>
-                        <p className={style.text}>{item.description}</p>
-                        <p className={style.text}>{item.price}</p>
-                        <p className={style.text}>{item.amount}</p>
-                    </div>
-                ))}
-            </div>
-        );
-    };
+        } /*else {
+            return (
+                <div className={`${isActive ? style.cartActive : style.hidden}`}>
+                    {cartToRender.map((item) => (
+                        <div className={style.cartItem} key={item.id}>
+                            <p className={style.text}>{item.name}</p>
+                            <p className={style.text}>{item.description}</p>
+                            <p className={style.text}>{item.price}</p>
+                            <p className={style.text}>{item.amount}</p>
+                        </div>
+                    ))}
+                </div>
+            );
+        }*/
+    }
 
     return (
         <div className={style.headerWrapper}>
             <p className={style.logo}>IShop</p>
-            <button className={style.btn} onClick={handleCartClick(cart)}>Корзина</button>
-            <GetCart cart={cart} isActive={activeCart}/>
+            <button className={style.btn} onClick={handleCartClick}>Корзина</button>
+            <GetCart cartToRender={cartToRender} isActive={activeCart}/>
         </div>
     )
-}*/
+}
 
 
 
