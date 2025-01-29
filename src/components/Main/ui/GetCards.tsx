@@ -1,5 +1,5 @@
 import style from './style.module.scss'
-export const GetCards = ({mapCards, currentCart, onClickBuy}) => {
+export const GetCards = ({mapCards, cardsCart, onClickBuy}) => {
     return (
         <div className={style.gridcontainer}>
             {mapCards.map((item) => (
@@ -12,7 +12,7 @@ export const GetCards = ({mapCards, currentCart, onClickBuy}) => {
                         <button
                             className={style.btnBuy}
                             id = {item.id}
-                            onClick={(e)=>{onClickBuy(e, currentCart)}}
+                            onClick={()=>{onClickBuy(cardsCart, item.id)}}
                         >Купить
                         </button>
                     </div>

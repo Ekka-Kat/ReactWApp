@@ -1,0 +1,61 @@
+@import './../../../../src/styles/globals';
+
+.headerWrapper {
+  margin: 0 auto;
+  padding-top: 30px;
+  max-width: 1400px;
+  height: 170px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo{
+  font-size: 24px;
+  font-weight: 600;
+  color: green;
+}
+
+.text {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.btn {
+  width: 100px;
+  height: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.btnInactive {
+  color: gray;
+}
+.btnActive {
+  color: black;
+}
+
+.cartPopup {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 500px;
+  background-color: white;
+  border: 1px solid gray;
+  display: none;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* добавляем прокрутку, если содержимого много */
+  max-height: 300px; /* максимальная высота окна */
+}
+
+.cartActive {
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none;
+}

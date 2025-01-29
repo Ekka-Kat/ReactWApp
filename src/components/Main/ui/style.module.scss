@@ -1,14 +1,5 @@
 @import './../../../../src/styles/globals';
 
-.headerWrapper {
-  margin: 0 auto;
-  padding-top: 30px;
-  max-width: 1400px;
-  height: 70px;
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-}
 .gridcontainer {
   max-width: 1300px;
   margin: 0 auto;
@@ -24,12 +15,6 @@
   align-items: center;
   border: 1px solid gray;
   border-radius: 10px;
-}
-
-.logo{
-  font-size: 24px;
-  font-weight: 600;
-  color: green;
 }
 
 .text {

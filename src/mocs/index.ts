@@ -68,11 +68,13 @@ export interface ICartItem {
         description: string;
         amount: number;
 }
-/*
-export const cartItem: ICartItem = {
-    id: 0,
-    name: '',
-    price: 0,
-    description: '',
-    amount: 0,
-};*/
+
+export interface ICartProps {
+    cart: ICartItem[];
+}
+
+export interface IGetCartProps {
+    currentCart: ICartItem[];
+    isActive: boolean;
+    handleCartClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
