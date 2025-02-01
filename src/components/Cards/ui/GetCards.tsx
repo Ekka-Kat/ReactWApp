@@ -1,5 +1,6 @@
 import style from './style.module.scss'
-export const GetCards = ({mapCards, cardsCart, onClickBuy}) => {
+import { IGetCardProps } from '../../..//mocs';
+export const GetCards = ({mapCards, onClickBuy}: IGetCardProps) => {
     return (
         <div className={style.gridcontainer}>
             {mapCards.map((item) => (
@@ -11,8 +12,7 @@ export const GetCards = ({mapCards, cardsCart, onClickBuy}) => {
                         <span className={style.text}>{item.price}</span>
                         <button
                             className={style.btnBuy}
-                            id = {item.id}
-                            onClick={()=>{onClickBuy(cardsCart, item.id)}}
+                            onClick={()=>{onClickBuy(item.id)}}
                         >Купить
                         </button>
                     </div>

@@ -1,0 +1,1 @@
+export const getCard = (state: any) => state.card;

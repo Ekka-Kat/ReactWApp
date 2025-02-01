@@ -1,9 +1,11 @@
-import {Main} from "../../components/Main/ui/Main.tsx";
+import {Cards} from "../../components/Cards/ui/Cards.tsx";
+import {Header} from "../../components/Header";
 
 export const HomePage = () => {
     return (
            <>
-            <Main/>
+            <Header/>
+            <Cards/>
            </>
     )
 }
