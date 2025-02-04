@@ -9,27 +9,30 @@
 }
 
 .cardWrapper {
+  padding-top: 10px;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid gray;
-  border-radius: 10px;
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  justify-content: space-between;
 }
 
 .text {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
 .cardImg {
-  max-width: 380px;
+  width: 90%;
 }
 
-.btnBuy{
-  width: 80px;
+.btnBuy {
+  padding: 5px;
   height: 30px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   border: 1px solid gray;
   border-radius: 5px;
@@ -40,6 +43,11 @@
   display: flex;
   width: 80%;
   justify-content: space-between;
+}
+
+.price{
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .selectWrapper {
@@ -85,4 +93,24 @@
   flex-direction: row;
   align-items: center;
   max-width: 30px;
+}
+
+.titleWrapper{
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.heart {
+ position: absolute;
+ top: 0;
+ left: 85%;
+}
+
+.heartActive {
+  fill: red;
+  border: none;
 }

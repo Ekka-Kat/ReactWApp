@@ -1,5 +1,3 @@
-import { createSlice, PayloadAction} from '@reduxjs/toolkit';
-// import {fetchCartData} from "./thunk.ts";
 import {ICartItem} from "../mocs";
 
 interface CartState {
@@ -14,7 +12,7 @@ const initialState: CartState = {
     error: null,
 };
 
-const cartSlice = createSlice({
+/*const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
@@ -31,25 +29,79 @@ const cartSlice = createSlice({
         },
         decreaseCart: (state, action: PayloadAction<number>) => {
             const id = action.payload;
-
             state.items = state.items.map((item) => {
-                if (item.id === id && item.amount > 1) {
-                    item.amount -= 1; // Уменьшаем количество, если оно больше 1
-                }
-                return item;
-            }).filter(item => item.amount > 0);  // Удаляем товары с нулевым количеством
+                    if (item.id === id && item.amount > 0) {
+                        return { ...item, amount: item.amount - 1, price: item.pricePerItem * (item.amount - 1) };
+                    }
+                    return item;
+                })
+                .filter(item => item.amount > 0);  // Удаляем товары с нулевым количеством
         },
-        /*removeItemFromCart: (state, action: PayloadAction<number>) => {
-            // Удаление товара полностью из корзины
-            state.items = state.items.filter((item) => item.id !== action.payload);
-        },*/
         clearCart: (state) => {
             // Очистить корзину
             state.items = [];
         }
-
     },
-});
+});*/
 
-export const { addToCart, decreaseCart, clearCart } = cartSlice.actions;
-export const cartReducer = cartSlice.reducer;
+export const cartReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case 'FETCH_CART_REQUEST':
+            return {...state, loading: true};
+        case 'FETCH_CART_SUCCESS':
+            return {...state, loading: false, items: action.payload};
+        case 'FETCH_CART_FAILURE':
+            return {...state, loading: false, error: action.error};
+        case 'ADD_TO_CART': {
+            const item = action.payload;
+            const existingItemIndex = state.items.findIndex((i) => i.id === item.id);
+
+            if (existingItemIndex !== -1) {
+                // Если товар уже есть в корзине, обновляем его количество и цену
+                return {
+                    ...state,
+                    items: state.items.map((i, index) =>
+                        index === existingItemIndex
+                            ? {
+                                ...i,
+                                amount: i.amount + 1, // Увеличиваем количество
+                                price: i.pricePerItem * (i.amount + 1), // Пересчитываем цену
+                            }
+                            : i
+                    ),
+                };
+            } else {
+                // Если товара нет в корзине, добавляем его
+                return {
+                    ...state,
+                    items: [...state.items, { ...item, amount: 1, price: item.pricePerItem }],
+                };
+            }
+        }
+        case 'REMOVE_FROM_CART':
+            return {
+                ...state,
+                items: state.items
+                    .map((item) => {
+                        if (item.id === action.payload.id && item.amount > 0)
+                        {
+                           return {
+                           ...item,
+                            amount: item.amount - 1,
+                            price: item.pricePerItem * (item.amount - 1), // Обновляем цену
+                            };
+                        }
+                        return {...item};
+                   })
+                   .filter((item) => item.amount > 0), // Удаляем товары с нулевым количеством
+            };
+        case 'CLEAR_CART':
+            return {
+                ...state,
+                items: [], // Очищаем корзину
+            };
+        default:
+            return state;
+    }
+};
+

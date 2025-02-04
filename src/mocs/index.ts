@@ -69,7 +69,7 @@ export interface ICard {
         name: 'IPhone 14',
         price: 80,
         color: 'сияющая звезда',
-        description: '',
+        description: '256 Gb',
         cardImage:  'https://static.re-store.ru/upload/resize_cache/iblock/4c4/100500_800_140cd750bba9870f18aada2478b24840a/q1njeoh12b1pf5lk05ul40ty8ajxd77y.jpeg'
     },
     {
@@ -94,21 +94,24 @@ export interface ICartItem {
         amount: number;
 }
 
-/*export interface ICartProps {
-    cart: ICartItem[];
-}*/
-
 export interface IGetCartProps {
     isActive: boolean;
     handleCartClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+export interface IGetFavoriteProps {
+    isActive: boolean;
+    handleFavoritesClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 export interface IGetCardProps {
     mapCards: ICard[];
+    ActiveId: number[];
     onClickBuy: (id: number) => void;
+    onClickLike: (id: number) => void;
 }
 
 export interface IGetFilterButtonsProps {
     isActiveIndex: number;
-    onClick: (event: React.MouseEvent<HTMLButtonElement>, index: number) => void;
+    onClick: (btnText: string, index: number) => void;
 }

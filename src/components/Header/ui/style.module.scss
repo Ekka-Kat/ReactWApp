@@ -4,10 +4,11 @@
   margin: 0 auto;
   padding-top: 30px;
   max-width: 1400px;
-  height: 170px;
+  height: 110px;
   position: relative;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid lightgrey;
 }
 
 .logo{
@@ -18,11 +19,16 @@
 
 .text {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 22px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 24px;
 }
 
 .btn {
-  width: 100px;
+  padding: 5px;
   height: 30px;
   font-size: 20px;
   cursor: pointer;
@@ -39,23 +45,58 @@
 
 .cartPopup {
   position: absolute;
+  z-index: 5;
   top: 0;
   right: 0;
-  width: 500px;
+  width: 600px;
   background-color: white;
-  border: 1px solid gray;
+  border: 1px solid lightgrey;
   display: none;
   padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   overflow-y: auto; /* добавляем прокрутку, если содержимого много */
-  max-height: 300px; /* максимальная высота окна */
+  max-height: 500px; /* максимальная высота окна */
 }
 
 .cartActive {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .hidden {
   display: none;
+}
+
+.heartActive {
+  fill: red;
+  border: none;
+}
+.priceAmountWrapper {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.changeAmountWrapper {
+  width: 80px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+.btnIncDec {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+.closeClearWrapper{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
 }
