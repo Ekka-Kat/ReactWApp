@@ -12,38 +12,6 @@ const initialState: CartState = {
     error: null,
 };
 
-/*const cartSlice = createSlice({
-    name: 'cart',
-    initialState,
-    reducers: {
-        addToCart: (state, action: PayloadAction<ICartItem>) => {
-            const item = action.payload;
-            const existingItem = state.items.find((i) => i.id === item.id);
-
-            if (existingItem) {
-                existingItem.amount += 1;  // Увеличиваем количество, если товар уже в корзине
-                existingItem.price = existingItem.pricePerItem * existingItem.amount;  // считаем цену
-            } else {
-                state.items.push(item); // Добавляем товар, если его нет в корзине
-            }
-        },
-        decreaseCart: (state, action: PayloadAction<number>) => {
-            const id = action.payload;
-            state.items = state.items.map((item) => {
-                    if (item.id === id && item.amount > 0) {
-                        return { ...item, amount: item.amount - 1, price: item.pricePerItem * (item.amount - 1) };
-                    }
-                    return item;
-                })
-                .filter(item => item.amount > 0);  // Удаляем товары с нулевым количеством
-        },
-        clearCart: (state) => {
-            // Очистить корзину
-            state.items = [];
-        }
-    },
-});*/
-
 export const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'FETCH_CART_REQUEST':

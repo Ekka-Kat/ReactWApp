@@ -34,10 +34,26 @@ export const fetchCart = () => async (dispatch: Dispatch) => {
     }
 };
 
-export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch: Dispatch<AddToCartAction>) => {
+export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch, getState) => {
     try {
-        const response = await axios.post(API_URL, item);
-        dispatch({ type: 'ADD_TO_CART', payload: response.data });
+        const state = getState();
+        const existingItem = state.cart.items.find((i:ICartItem) => i.id === item.id);
+        console.log('state', state);
+        console.log('existingItem', existingItem);
+
+        if (existingItem) {
+            // Если товар есть, отправляем PUT-запрос для обновления
+            const response = await axios.put(`${API_URL}/${item.id}`, {
+                amount: existingItem.amount + 1,
+                price: existingItem.pricePerItem * (existingItem.amount + 1),
+            });
+
+            dispatch({ type: 'ADD_TO_CART', payload: response.data });
+        } else {
+            // Если товара нет, отправляем POST-запрос
+            const response = await axios.post(API_URL, item);
+            dispatch({ type: 'ADD_TO_CART', payload: response.data });
+        }
     } catch (error) {
         console.error('Error adding to cart:', error);
     }

@@ -4,15 +4,24 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store.ts";
 import { removeFromFavorites, clearFavorites } from "../../../store/likeReducer.ts";
+import {addToCart} from "../../../store/thunkCart.ts";
+import { AppDispatch } from '../../../store/store.ts';
 //import { addToCart} from "../../../store/cartReducer.ts";
 
 export const GetFavorites = ({isActive, handleFavoritesClose}: IGetFavoriteProps, ) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const likeItems = useSelector((state: RootState) => state.like.items);
 
     // Переносим товар в корзину
     const handleRemoveToCart = (item: ICartItem) => {
-       // dispatch(addToCart(item));  // переносим в корзину
+        dispatch(addToCart({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            pricePerItem: item.price,
+            description: item.description,
+            amount: 1,
+        })); // переносим в корзину
         dispatch(removeFromFavorites(item.id)); //удаляем из избранных
     };
 

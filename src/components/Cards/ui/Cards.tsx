@@ -42,6 +42,7 @@ export const Cards = () => {
 
    const handleAddToCart = (id: number) => {
         const cardToCart = cards.find((item) => item.id === id);
+        console.log('id', id);
         if (cardToCart) {
             dispatch(addToCart({
                 id: cardToCart.id,
