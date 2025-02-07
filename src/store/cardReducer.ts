@@ -1,6 +1,6 @@
 import { createSlice} from '@reduxjs/toolkit';
 import {fetchCardData} from "./thunk.ts";
-import {ICard} from "../mocs";
+import {ICard} from "../types";
 
 
 interface CardState {

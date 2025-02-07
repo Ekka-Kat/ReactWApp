@@ -1,5 +1,5 @@
 import style from "./style.module.scss";
-import {filterBtns, IGetFilterButtonsProps} from "../../../mocs";
+import {filterBtns, IGetFilterButtonsProps} from "../../../types";
 import clsx from "clsx";
 
 export const GetButtons = ( {isActiveIndex, onClick}: IGetFilterButtonsProps) => {
@@ -13,14 +13,11 @@ export const GetButtons = ( {isActiveIndex, onClick}: IGetFilterButtonsProps) =>
                         [style.btnActive]: isActiveIndex === index,
                         [style.btnInactive]: isActiveIndex !== index,
                     })}
-                    onClick={(event) => {
-                        const target = event.currentTarget as HTMLElement;
-                        onClick(target.innerHTML, index);
-                    }}
-                >{item}
+                    onClick={() => {onClick(item, index);}}
+                >
+                    {item}
                 </button>
-            ))
-            }
+            ))}
         </div>
-    )
-}
+    );
+};

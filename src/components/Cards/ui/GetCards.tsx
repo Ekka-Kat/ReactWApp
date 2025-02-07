@@ -1,5 +1,5 @@
 import style from './style.module.scss'
-import { IGetCardProps } from '../../../mocs';
+import { IGetCardProps } from '../../../types';
 import clsx from "clsx";
 //import { ReactComponent as HeartIcon } from '../../../assets/like.svg';
 

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ICartItem} from "../mocs";
+import {ICartItem} from "../types";
 
 interface LikeState {
     items: ICartItem[];

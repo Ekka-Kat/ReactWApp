@@ -9,6 +9,10 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid lightgrey;
+
+  @include media-breakpoint-down(minsm) {
+    max-width: 360px;
+  }
 }
 
 .logo{
@@ -56,18 +60,29 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   overflow-y: auto; /* добавляем прокрутку, если содержимого много */
   max-height: 500px; /* максимальная высота окна */
-}
 
+  @include media-breakpoint-down(minsm) {
+    width: 350px;
+  }
+
+}
 .cartActive {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 100px;
 }
 
 .hidden {
   display: none;
 }
 
+.emptyCart{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .heartActive {
   fill: red;
   border: none;

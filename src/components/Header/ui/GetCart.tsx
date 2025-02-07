@@ -1,4 +1,4 @@
-import {ICartItem, IGetCartProps} from "../../../mocs";
+import {ICartItem, IGetCartProps} from "../../../types";
 import style from "../../Header/ui/style.module.scss";
 import clsx from 'clsx';
 import { useDispatch, useSelector } from "react-redux";
@@ -14,9 +14,13 @@ export const GetCart = ({isActive, handleCartClose}: IGetCartProps, ) => {
         dispatch(fetchCart() as any)
     }, [dispatch]);
 
+    useEffect(() => {
+        console.log("Use Effect.State обновился:", cartItems);
+    }, [cartItems]);
+
     // Уменьшение количества товара
-    const handleDecreaseQuantity = (id: number) => {
-        dispatch(removeFromCart(id)); // Уменьшаем количество товара
+    const handleDecreaseQuantity = (item: ICartItem) => {
+        dispatch(removeFromCart(item)); // Уменьшаем количество товара
     };
 
     // Увеличение количества товара
@@ -32,40 +36,39 @@ export const GetCart = ({isActive, handleCartClose}: IGetCartProps, ) => {
     // Подсчет общей стоимости
     const totalPrice = cartItems.reduce((total: number, item: ICartItem) => total + item.price, 0);
 
-    if (cartItems.length === 0) {
-        return (
-            <div className={clsx(style.cartPopup, isActive && style.cartActive)}>
-                <p> В корзине 0 товаров </p>
-                <button className={style.btn} onClick={handleCartClose}>Закрыть</button>
-            </div>
-        );
-    }
-
-    if (cartItems.length > 0) {
-        return (
-            <div className={clsx(style.cartPopup, isActive && style.cartActive)}>
-                {cartItems.map((item: ICartItem) => (
-                    <div className={style.cartItem} key={item.id}>
-                        <p className={style.title}>{item.name}</p>
-                        <p className={style.text}>{item.description}</p>
-                        <div className={style.priceAmountWrapper}>
-                        <p className={style.text}>{item.price} ₽</p>
-                        <div className={style.changeAmountWrapper}>
-                            <button className={style.btnIncDec} onClick={() => handleDecreaseQuantity(item.id)}>-</button>
-                            <span className={style.text}>{item.amount}</span>
-                            <button className={style.btnIncDec} onClick={() => handleIncreaseQuantity(item)}>+</button>
-                        </div>
-                        </div>
-                    </div>
-                ))}
-                <div className={style.text}>
-                    <p>Итоговая стоимость:{totalPrice} ₽</p>
-                </div>
-                <div className={style.closeClearWrapper}>
-                    <button onClick={handleClearCart} className={style.btn}>Очистить корзину</button>
+    return (
+        <div className={clsx(style.cartPopup, isActive && style.cartActive)}>
+            {!cartItems.length && (
+                <div className={style.emptyCart}>
+                    <p> В корзине 0 товаров </p>
                     <button className={style.btn} onClick={handleCartClose}>Закрыть</button>
                 </div>
-            </div>
-        );
-    }
+            )}
+            {cartItems.length>0 && (
+                <div>
+                    {cartItems.map((item: ICartItem) => (
+                        <div className={style.cartItem} key={item.id}>
+                            <p className={style.title}>{item.name}</p>
+                            <p className={style.text}>{item.description}</p>
+                            <div className={style.priceAmountWrapper}>
+                                <p className={style.text}>{item.price} ₽</p>
+                                <div className={style.changeAmountWrapper}>
+                                    <button className={style.btnIncDec} onClick={() => handleDecreaseQuantity(item)}>-</button>
+                                    <span className={style.text}>{item.amount}</span>
+                                    <button className={style.btnIncDec} onClick={() => handleIncreaseQuantity(item)}>+</button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    <div className={style.text}>
+                        <p>Итоговая стоимость:{totalPrice} ₽</p>
+                    </div>
+                    <div className={style.closeClearWrapper}>
+                        <button onClick={handleClearCart} className={style.btn}>Очистить корзину</button>
+                        <button className={style.btn} onClick={handleCartClose}>Закрыть</button>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
 }

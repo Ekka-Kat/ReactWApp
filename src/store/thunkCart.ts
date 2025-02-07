@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import {ICartItem} from '../mocs'
+import {ICartItem} from '../types'
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from './store';
 const API_URL = 'https://6799dc16747b09cdccccc46c.mockapi.io/api/v1/cart';
@@ -37,17 +37,13 @@ export const fetchCart = () => async (dispatch: Dispatch) => {
 export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch, getState) => {
     try {
         const state = getState();
-        const existingItem = state.cart.items.find((i:ICartItem) => i.id === item.id);
-        console.log('state', state);
+        const existingItem = state.cart.items.find((i:ICartItem) => Number(i.id) === Number(item.id));
+        console.log('Thunk addToCart, state.cart', state.cart);
         console.log('existingItem', existingItem);
 
         if (existingItem) {
             // Если товар есть, отправляем PUT-запрос для обновления
-            const response = await axios.put(`${API_URL}/${item.id}`, {
-                amount: existingItem.amount + 1,
-                price: existingItem.pricePerItem * (existingItem.amount + 1),
-            });
-
+            const response = await axios.put(`${API_URL}/${item.id}`);
             dispatch({ type: 'ADD_TO_CART', payload: response.data });
         } else {
             // Если товара нет, отправляем POST-запрос
@@ -59,11 +55,15 @@ export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch
     }
 };
 
-export const removeFromCart = (id: number): ThunkResult<void> => async (dispatch: Dispatch<RemoveFromCartAction>) => {
+export const removeFromCart = (item: ICartItem): ThunkResult<void> => async (dispatch: Dispatch<RemoveFromCartAction>) => {
     try {
-        console.log('Deleting item with id:', id); // Логируем id
-        await axios.delete(`${API_URL}/${id}`);
-        dispatch({ type: 'REMOVE_FROM_CART', payload: id });
+        if (item.amount>1) {
+            await axios.put(`${API_URL}/${item.id}`);
+            dispatch({ type: 'REMOVE_FROM_CART', payload: item.id });
+        } else {
+            await axios.delete(`${API_URL}/${item.id}`);
+            dispatch({ type: 'REMOVE_FROM_CART', payload: item.id });
+        }
     } catch (error) {
         console.error('Error removing from cart:', error);
     }
@@ -71,9 +71,14 @@ export const removeFromCart = (id: number): ThunkResult<void> => async (dispatch
 
 export const clearCart = (): ThunkResult<void> => async (dispatch: Dispatch<ClearCartAction>) => {
     try {
-        await axios.delete(`${API_URL}`);
-        dispatch({ type: 'CLEAR_CART',  });
+        const response = await axios.get(`${API_URL}`);
+        const cartItems: { id: string }[] = response.data; // Предполагаем, что у каждого товара есть `id`
+
+        // Удаляем каждый товар отдельно
+        await Promise.all(cartItems.map(item => axios.delete(`${API_URL}/${item.id}`)));
+        dispatch({ type: 'CLEAR_CART' });
+
     } catch (error) {
-        console.error('Error removing from cart:', error);
+        console.error('Error clearing cart:', error);
     }
 };

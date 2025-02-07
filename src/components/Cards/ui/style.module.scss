@@ -6,6 +6,21 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  padding: 10px;
+
+  @include media-breakpoint-down(minxl) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @include media-breakpoint-down(md) {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  @include media-breakpoint-down(minsm) {
+    display: flex;
+    flex-flow: column nowrap;
+  }
 }
 
 .cardWrapper {
@@ -58,6 +73,12 @@
   flex-direction: row;
   align-items: center;
   gap: 20px;
+
+  @include media-breakpoint-down(md) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
 }
 
 .btn {
@@ -67,6 +88,12 @@
   cursor: pointer;
   border: 1px solid gray;
   border-radius: 5px;
+
+  @include media-breakpoint-down(md) {
+    width: 80px;
+    font-size: 14px;
+  }
+
 }
 
 .btnInactive {
