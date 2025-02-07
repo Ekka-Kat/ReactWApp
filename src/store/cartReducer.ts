@@ -1,4 +1,5 @@
-import {ICartItem} from "../types";
+import { createAction, createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { ICartItem } from '../types';
 
 interface CartState {
     items: ICartItem[];
@@ -11,77 +12,54 @@ const initialState: CartState = {
     loading: false,
     error: null,
 };
+// Создаем действия
+const fetchCartRequest = createAction('FETCH_CART_REQUEST');
+const fetchCartSuccess = createAction<ICartItem[]>('FETCH_CART_SUCCESS');
+const fetchCartFailure = createAction<string>('FETCH_CART_FAILURE');
+const addToCart = createAction<ICartItem>('ADD_TO_CART');
+const removeFromCart = createAction<number>('REMOVE_FROM_CART');
+const clearCart = createAction('CLEAR_CART');
 
-type CartAction =
-    | {type: 'FETCH_CART_REQUEST'}
-    | {type: 'FETCH_CART_SUCCESS'; payload: ICartItem[]}
-    | {type: 'FETCH_CART_FAILURE'; error: string}
-    | {type: 'ADD_TO_CART'; payload: ICartItem}
-    | {type: 'REMOVE_FROM_CART'; payload: number}
-    | {type: 'CLEAR_CART'}
 
-export const cartReducer = (state = initialState, action: CartAction) => {
-    switch (action.type) {
-        case 'FETCH_CART_REQUEST':
-            return {...state, loading: true};
-        case 'FETCH_CART_SUCCESS':
-            return {...state, loading: false, items: action.payload};
-        case 'FETCH_CART_FAILURE':
-            return {...state, loading: false, error: action.error};
-        case 'ADD_TO_CART': {
+export const cartReducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(fetchCartRequest, (state) => {
+            state.loading = true;
+        })
+        .addCase(fetchCartSuccess, (state, action: PayloadAction<ICartItem[]>) => {
+            state.loading = false;
+            state.items = action.payload;
+        })
+        .addCase(fetchCartFailure, (state, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(addToCart, (state, action: PayloadAction<ICartItem>) => {
             const item = action.payload;
-            const existingItemIndex = state.items.findIndex((i) => Number(i.id) == Number(item.id));
-            console.log('existingItemIndex', existingItemIndex);
+            const existingItemIndex = state.items.findIndex((i) => Number(i.id) === Number(item.id));
 
             if (existingItemIndex !== -1) {
-                // Если товар уже есть в корзине, обновляем его количество и цену
-                return {
-                    ...state,
-                    items: state.items.map((i, index) =>
-                        index === existingItemIndex
-                            ? {
-                                ...i,
-                                amount: i.amount + 1, // Увеличиваем количество
-                                price: i.pricePerItem * (i.amount + 1), // Пересчитываем цену
-                            }
-                            : i
-                    ),
-                };
+                state.items[existingItemIndex].amount += 1;
+                state.items[existingItemIndex].price = state.items[existingItemIndex].pricePerItem * state.items[existingItemIndex].amount;
+            } else {
+                state.items.push({ ...item, amount: 1, price: item.pricePerItem });
             }
-            else {
-                // Если товара нет в корзине, добавляем его
-                return {
-                    ...state,
-                    items: [...state.items, { ...item, amount: 1, price: item.pricePerItem }],
-                };
+        })
+        .addCase(removeFromCart, (state, action: PayloadAction<number>) => {
+            const itemId = action.payload;
+            const itemIndex = state.items.findIndex((i) => i.id === itemId);
+
+            if (itemIndex !== -1 && state.items[itemIndex].amount > 0) {
+                state.items[itemIndex].amount -= 1;
+                state.items[itemIndex].price = state.items[itemIndex].pricePerItem * state.items[itemIndex].amount;
+
+                if (state.items[itemIndex].amount === 0) {
+                    state.items.splice(itemIndex, 1);
+                }
             }
-        }
-        case 'REMOVE_FROM_CART':
-            console.log("REMOVE_FROM_CART. Action Payload:", action.payload);
-            return {
-                ...state,
-                items: [...state.items]
-                    .map((item) => {
-                        if (item.id === action.payload && item.amount > 0)
-                        {
-                            console.log('item.id', item.id);
-                           return {
-                           ...item,
-                            amount: item.amount - 1,
-                            price: item.pricePerItem * (item.amount - 1), // Обновляем цену
-                            };
-                        }
-                        return {...item};
-                   })
-                   .filter((item) => item.amount > 0), // Удаляем товары с нулевым количеством
-            };
-        case 'CLEAR_CART':
-            return {
-                ...state,
-                items: [], // Очищаем корзину
-            };
-        default:
-            return state;
-    }
-};
+        })
+        .addCase(clearCart, (state) => {
+            state.items = [];
+        });
+});
 

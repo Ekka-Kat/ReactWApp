@@ -7,8 +7,6 @@ export interface ICard {
     cardImage: string;
 }
 
-//export const filterBtns = ['Все', 'IPhone 16', 'IPhone 15', 'IPhone 14'];
-
 type FilterType = 'Все' | 'IPhone 16' | 'IPhone 15' | 'IPhone 14';
 
 export const filterBtns: FilterType[] = ['Все', 'IPhone 16', 'IPhone 15', 'IPhone 14'];
@@ -38,11 +36,6 @@ export interface IGetCardProps {
     onClickBuy: (id: number) => void;
     onClickLike: (id: number) => void;
 }
-
-/*export interface IGetFilterButtonsProps {
-    isActiveIndex: number;
-    onClick: (btnText: string, index: number) => void;
-}*/
 
 export interface IGetFilterButtonsProps {
     isActiveIndex: number;
