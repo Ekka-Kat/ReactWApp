@@ -43,7 +43,8 @@ export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch
 
         if (existingItem) {
             // Если товар есть, отправляем PUT-запрос для обновления
-            const response = await axios.put(`${API_URL}/${item.id}`);
+            const updatedItem = { ...item, amount: item.amount + 1, price: item.pricePerItem * (item.amount + 1)};
+            const response = await axios.put(`${API_URL}/${item.id}`, updatedItem);
             dispatch({ type: 'ADD_TO_CART', payload: response.data });
         } else {
             // Если товара нет, отправляем POST-запрос
@@ -58,7 +59,8 @@ export const addToCart = (item: ICartItem): ThunkResult<void> => async (dispatch
 export const removeFromCart = (item: ICartItem): ThunkResult<void> => async (dispatch: Dispatch<RemoveFromCartAction>) => {
     try {
         if (item.amount>1) {
-            await axios.put(`${API_URL}/${item.id}`);
+            const updatedItem = { ...item, amount: item.amount - 1, price: item.pricePerItem * (item.amount - 1)};
+            await axios.put(`${API_URL}/${item.id}`, updatedItem);
             dispatch({ type: 'REMOVE_FROM_CART', payload: item.id });
         } else {
             await axios.delete(`${API_URL}/${item.id}`);
@@ -72,7 +74,7 @@ export const removeFromCart = (item: ICartItem): ThunkResult<void> => async (dis
 export const clearCart = (): ThunkResult<void> => async (dispatch: Dispatch<ClearCartAction>) => {
     try {
         const response = await axios.get(`${API_URL}`);
-        const cartItems: { id: string }[] = response.data; // Предполагаем, что у каждого товара есть `id`
+        const cartItems: { id: string }[] = response.data;
 
         // Удаляем каждый товар отдельно
         await Promise.all(cartItems.map(item => axios.delete(`${API_URL}/${item.id}`)));
